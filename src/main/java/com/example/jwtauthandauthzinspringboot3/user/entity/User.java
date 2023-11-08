@@ -1,23 +1,25 @@
 package com.example.jwtauthandauthzinspringboot3.user.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-@Getter
-@Setter
+@Data
 @Entity
+@Builder
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     private String email;
 
@@ -25,6 +27,10 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
