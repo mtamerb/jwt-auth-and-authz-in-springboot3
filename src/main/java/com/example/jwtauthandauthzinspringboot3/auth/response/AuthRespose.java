@@ -1,4 +1,4 @@
-package com.example.jwtauthandauthzinspringboot3.auth;
+package com.example.jwtauthandauthzinspringboot3.auth.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AuthRequest {
+public class AuthRespose {
 
-    private String username;
+    private String email;
     private String password;
 }
