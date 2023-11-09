@@ -25,7 +25,6 @@ public class AuthService {
 
     public User register(RegisterRequest registerRequest) {
 
-        // used @builder annotations to create a new user object
         return User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
