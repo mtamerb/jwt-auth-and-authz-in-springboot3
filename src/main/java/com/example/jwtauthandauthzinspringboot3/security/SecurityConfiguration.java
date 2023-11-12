@@ -17,9 +17,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 @RequiredArgsConstructor
 class SecurityConfiguration {
 
-    private final AuthenticationProvider authenticationProvider;
-
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private  AuthenticationProvider authenticationProvider;
+    private  JwtAuthenticationFilter jwtAuthenticationFilter;
+    SecurityConfiguration(AuthenticationProvider authenticationProvider, JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.authenticationProvider = authenticationProvider;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

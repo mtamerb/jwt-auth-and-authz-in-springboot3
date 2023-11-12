@@ -16,11 +16,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private final UserRepository userRepository;
-
+    private  UserRepository userRepository;
     private AuthenticationManager authenticationManager;
-
     private PasswordEncoder passwordEncoder;
+    public AuthService(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.authenticationManager = authenticationManager;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public User register(RegisterRequest registerRequest) {
@@ -34,8 +37,8 @@ public class AuthService {
                 .build();
     }
 
-
     public User authenticate(LoginRequest loginRequest) {
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
