@@ -3,10 +3,14 @@ package com.example.jwtauthandauthzinspringboot3.auth.service;
 
 import com.example.jwtauthandauthzinspringboot3.auth.request.LoginRequest;
 import com.example.jwtauthandauthzinspringboot3.auth.request.RegisterRequest;
+import com.example.jwtauthandauthzinspringboot3.auth.response.AuthResponse;
+import com.example.jwtauthandauthzinspringboot3.security.JwtService;
 import com.example.jwtauthandauthzinspringboot3.user.entity.Role;
 import com.example.jwtauthandauthzinspringboot3.user.entity.User;
 import com.example.jwtauthandauthzinspringboot3.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,36 +20,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private  UserRepository userRepository;
-    private AuthenticationManager authenticationManager;
-    private PasswordEncoder passwordEncoder;
-    public AuthService(UserRepository userRepository, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final UserRepository userRepository;
+
+    private final JwtService jwtService;
 
 
-    public User register(RegisterRequest registerRequest) {
+    public AuthResponse register(RegisterRequest registerRequest) {
 
-        return User.builder()
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            return new AuthResponse("User with this email already exists", HttpStatus.BAD_REQUEST);
+        }
+
+        User user = User.builder()
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
-                .password(passwordEncoder.encode(registerRequest.getPassword()))
+                .password(new BCryptPasswordEncoder().encode(registerRequest.getPassword()))
                 .role(Role.USER)
+                .build();
+
+        userRepository.save(user);
+        var token = jwtService.generateToken(user);
+
+        return AuthResponse.builder()
+                .token(token)
+                .message("User registered successfully")
+                .response(HttpStatus.CREATED)
                 .build();
     }
 
-    public User authenticate(LoginRequest loginRequest) {
-
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getEmail(),
-                        loginRequest.getPassword()
-                )
-        );
-        return userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
-    }
 
 }
