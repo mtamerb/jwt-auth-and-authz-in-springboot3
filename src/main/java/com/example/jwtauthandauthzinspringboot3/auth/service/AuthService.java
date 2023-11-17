@@ -11,7 +11,6 @@ import com.example.jwtauthandauthzinspringboot3.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
 
@@ -40,12 +40,27 @@ public class AuthService {
                 .build();
 
         userRepository.save(user);
-        var token = jwtService.generateToken(user);
 
         return AuthResponse.builder()
-                .token(token)
                 .message("User registered successfully")
                 .response(HttpStatus.CREATED)
+                .build();
+    }
+
+    public AuthResponse login(LoginRequest loginRequest) {
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+        User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtService.generateToken(user);
+
+        String message = user.getRole().equals(Role.ADMIN) ? "Admin logged in successfully" : "User logged in successfully";
+
+        return AuthResponse.builder()
+                .message(message)
+                .response(HttpStatus.OK)
+                .token(token)
                 .build();
     }
 

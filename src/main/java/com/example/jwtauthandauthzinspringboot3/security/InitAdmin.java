@@ -19,14 +19,15 @@ public class InitAdmin implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        final String admin = "admin";
         if (userRepository.count() == 0) {
             log.info("No user found, creating admin user");
             userRepository.save(
                     User.builder()
-                            .firstName("admin")
-                            .lastName("admin")
-                            .email("tamerb@gmail.com")
-                            .password(new BCryptPasswordEncoder().encode("admin password"))
+                            .firstName(admin)
+                            .lastName(admin)
+                            .email(admin + "@example.com")
+                            .password(new BCryptPasswordEncoder().encode("_admin_"))
                             .role(Role.ADMIN)
                             .build());
 
