@@ -27,9 +27,12 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(mvcMatcherBuilder.pattern("api/v1/auth/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern("api/v1/auth/**"),
+                                mvcMatcherBuilder.pattern("api/v1/auth/authenticate/**"),
+                                mvcMatcherBuilder.pattern("api/v1/auth/register/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/auth/user")).hasRole("USER")
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/auth/admin")).hasRole("ADMIN")
                         .anyRequest().authenticated()
-
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
