@@ -1,5 +1,6 @@
 package com.example.jwtauthandauthzinspringboot3.auth.request;
 
+import com.example.jwtauthandauthzinspringboot3.user.entity.Role;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -18,4 +19,6 @@ public class RegisterRequest {
 
     @NotBlank(message = "Password is required")
     private String password;
+
+    private Role role;
 }

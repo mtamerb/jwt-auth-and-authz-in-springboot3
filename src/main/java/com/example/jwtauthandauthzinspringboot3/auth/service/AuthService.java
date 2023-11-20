@@ -15,6 +15,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import static com.example.jwtauthandauthzinspringboot3.user.entity.Role.ADMIN;
+import static com.example.jwtauthandauthzinspringboot3.user.entity.Role.USER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -36,7 +39,7 @@ public class AuthService {
                 .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
                 .password(new BCryptPasswordEncoder().encode(registerRequest.getPassword()))
-                .role(Role.USER)
+                .role(USER)
                 .build();
 
         userRepository.save(user);
@@ -55,7 +58,7 @@ public class AuthService {
 
         String token = jwtService.generateToken(user);
 
-        String message = user.getRole().equals(Role.ADMIN) ? "Admin logged in successfully" : "User logged in successfully";
+        String message = user.getRole().equals(ADMIN) ? "Admin logged in successfully" : "User logged in successfully";
 
         return AuthResponse.builder()
                 .message(message)
