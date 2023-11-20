@@ -9,6 +9,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import static com.example.jwtauthandauthzinspringboot3.user.entity.Role.ADMIN;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,7 +30,7 @@ public class InitAdmin implements CommandLineRunner {
                             .lastName(admin)
                             .email(admin + "@example.com")
                             .password(new BCryptPasswordEncoder().encode("_admin_"))
-                            .role(Role.ADMIN)
+                            .role(ADMIN)
                             .build());
 
         } else {
