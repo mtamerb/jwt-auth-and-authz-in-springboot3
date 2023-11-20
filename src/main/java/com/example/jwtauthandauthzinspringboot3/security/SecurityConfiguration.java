@@ -12,6 +12,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
+import static com.example.jwtauthandauthzinspringboot3.user.entity.Role.ADMIN;
+import static com.example.jwtauthandauthzinspringboot3.user.entity.Role.USER;
+
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
@@ -30,9 +33,12 @@ public class SecurityConfiguration {
                         .requestMatchers(mvcMatcherBuilder.pattern("api/v1/auth/**"),
                                 mvcMatcherBuilder.pattern("api/v1/auth/authenticate/**"),
                                 mvcMatcherBuilder.pattern("api/v1/auth/register/**")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/auth/user")).hasRole("USER")
-                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/auth/admin")).hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/admin/**"))
+                        .hasRole(ADMIN.name())
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/v1/user/**"))
+                        .hasRole(USER.name())
+                        .anyRequest()
+                        .authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
