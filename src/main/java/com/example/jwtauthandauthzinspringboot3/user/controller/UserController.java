@@ -7,26 +7,16 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    @GetMapping("/")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> homePanel() {
-        return ResponseEntity.ok("Welcome to home panel");
-    }
 
-    @PostMapping("/user")
+    @PostMapping("/panel")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> userPanel() {
         return ResponseEntity.ok("Welcome to the is user panel");
     }
 
-    @PostMapping("/admin")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> adminPanel() {
-        return ResponseEntity.ok("Welcome to the is admin panel");
-    }
 
 }

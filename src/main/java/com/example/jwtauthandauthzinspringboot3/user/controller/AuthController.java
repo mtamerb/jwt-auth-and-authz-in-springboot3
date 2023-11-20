@@ -18,6 +18,13 @@ public class AuthController {
 
     private final AuthService authService;
 
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> homePanel() {
+        return ResponseEntity.ok("Welcome to home panel");
+    }
+
+
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
