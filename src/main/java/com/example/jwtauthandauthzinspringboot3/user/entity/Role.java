@@ -2,7 +2,6 @@ package com.example.jwtauthandauthzinspringboot3.user.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
